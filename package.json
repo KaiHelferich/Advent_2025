@@ -1,0 +1,19 @@
+{
+  "name": "snake-game",
+  "version": "1.0.0",
+  "description": "Ein einfaches Snake-Spiel für den Browser",
+  "author": {
+    "name": "Kai Helferich"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "http-server -p 8080 -o -c-1",
+    "dev": "run-p watch start"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.3.3"
+  }
+}

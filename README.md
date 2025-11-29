@@ -1,2 +1,68 @@
-# Advent_2025
-Advent 2025 - Snake
+# Adventskalender | Snake Spiel
+
+Ein einfaches Snake-Spiel für den Browser, implementiert mit TypeScript und HTML.
+Täglich gibt es hier neue Aufgaben und Lösungen am Folgetag.
+
+Voraussetzungen:
+- Web-Entwicklungsumgebung, GIT, NodeJS lokal installiert
+- Kenntnisse über grundlegende Webentwicklung (inkl. Verwendung des Browser-Debuggers)
+
+## Tag 1
+
+### Übersicht / Ziel:
+
+- Spiel lokal starten
+- Fehlerbehebung
+- Funktion "Kollision mit dem Spielrand" implementieren
+
+### Installation
+
+1. Klone das Repository
+
+Öffne VScode oder eine beliebige andere Entwicklungsumgebung in einem neuen Projektordner und klone das Repository.
+
+2. Installiere die Abhängigkeiten:
+
+```bash
+npm install
+```
+
+3. Starte den lokalen Server:
+
+```bash
+npm run dev
+```
+
+Der Server läuft auf `http://localhost:8080` und öffnet automatisch den Browser.
+
+### Erklärung zur bestehenden Entwicklung
+
+- index.html ist der Container für das Spiel, sie gibt die grobe Seitenstruktur vor.
+- game.ts steuert die gesamte Spiellogik
+- package.json: der Task "dev" startet den lokalen HTTP server und parallel dazu einen Watch-Task, der nach jeder Änderung der Typescript Datei sofort die Javascript Datei erstellt, sodass sie im Browser verwendet werden kann. (Seite aktualisieren - F5, um die Änderungen in den Browser zu laden)
+
+### Aufgaben
+
+- Es gibt einen Fehler, weshalb das Spiel sofort beendet wird. Finde ihn und löse das Problem.
+
+    **Ergebnis**: Wenn der Fehler behoben ist, sollte die Snake sich mit den Pfeiltasten bewegen lassen, das Futter kann bereits aufgenommen werden und die Punkte werden gezählt. Das Spiel wird beendet, wenn die Snake mit sich selbst kollidiert.
+
+
+- Im nächsten Schritt soll die Kollision mit dem Spielrand implementiert werden. Wenn die Snake den Rand verlassen würde, soll das Spiel beendet werden.
+
+    **Ergebnis**: Nun solltest du ein lauffähiges Spiel haben, das ordentlich beendet wird und auch wieder neugestartet werden kann. 
+
+
+## Beschreibung des Spiels
+
+### Spielregeln
+
+- Bewege die Schlange mit den Pfeiltasten
+- Sammle das rote Futter, um Punkte zu sammeln
+- Vermeide Kollisionen mit den Wänden und dir selbst
+- Die Schlange wird länger, wenn du Futter sammelst
+
+### Steuerung
+
+- **Pfeiltasten**: Bewege die Schlange
+- **Leertaste**: Neustart nach Game Over

@@ -1,0 +1,191 @@
+// Snake-Spiel in TypeScript
+
+interface Position {
+    x: number;
+    y: number;
+}
+
+class SnakeGame {
+    private canvas: HTMLCanvasElement;
+    private ctx: CanvasRenderingContext2D;
+    private scoreElement: HTMLElement;
+    private gameOverElement: HTMLElement;
+    
+    private gridSize: number = 20;
+    private tileCount: number = 20;
+    
+    private snake: Position[] = [{ x: 10, y: 10 }];
+    private food: Position = { x: 15, y: 15 };
+    private dx: number = 0;
+    private dy: number = 0;
+    private score: number = 0;
+    private gameRunning: boolean = true;
+    
+    constructor() {
+        this.canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+        this.ctx = this.canvas.getContext('2d')!;
+        this.scoreElement = document.getElementById('score')!;
+        this.gameOverElement = document.getElementById('gameOver')!;
+        
+        this.setupEventListeners();
+        this.gameLoop();
+    }
+    
+    private setupEventListeners(): void {
+        document.addEventListener('keydown', (e) => {
+            if (!this.gameRunning && e.code === 'Space') {
+                this.resetGame();
+                return;
+            }
+            
+            if (!this.gameRunning) return;
+            
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (this.dy !== 1) {
+                        this.dx = 0;
+                        this.dy = -1;
+                    }
+                    break;
+                case 'ArrowDown':
+                    if (this.dy !== -1) {
+                        this.dx = 0;
+                        this.dy = 1;
+                    }
+                    break;
+                case 'ArrowLeft':
+                    if (this.dx !== 1) {
+                        this.dx = -1;
+                        this.dy = 0;
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (this.dx !== -1) {
+                        this.dx = 1;
+                        this.dy = 0;
+                    }
+                    break;
+            }
+        });
+    }
+    
+    private resetGame(): void {
+        this.snake = [{ x: 10, y: 10 }];
+        this.food = { x: 15, y: 15 };
+        this.dx = 0;
+        this.dy = 0;
+        this.score = 0;
+        this.gameRunning = true;
+        this.gameOverElement.style.display = 'none';
+        this.updateScore();
+    }
+    
+    private updateScore(): void {
+        this.scoreElement.textContent = `Punkte: ${this.score}`;
+    }
+    
+    private drawGame(): void {
+        // Canvas leeren
+        this.ctx.fillStyle = '#fff';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Snake zeichnen
+        this.ctx.fillStyle = '#4CAF50';
+        this.snake.forEach((segment, index) => {
+            if (index === 0) {
+                // Kopf etwas dunkler
+                this.ctx.fillStyle = '#157019';
+            } else {
+                this.ctx.fillStyle = '#4CAF50';
+            }
+            this.ctx.fillRect(
+                segment.x * this.gridSize,
+                segment.y * this.gridSize,
+                this.gridSize - 2,
+                this.gridSize - 2
+            );
+        });
+        
+        // Futter zeichnen - als Kreis mit Schattierung
+        const centerX = this.food.x * this.gridSize + this.gridSize / 2;
+        const centerY = this.food.y * this.gridSize + this.gridSize / 2;
+        const radius = (this.gridSize - 4) / 2;
+
+        // Kreis mit Farbverlauf
+        const gradient = this.ctx.createRadialGradient(
+            centerX, centerY, radius * 0.3,
+            centerX, centerY, radius
+        );
+        gradient.addColorStop(0, "#ff7961");
+        gradient.addColorStop(1, "#f44336");
+        this.ctx.beginPath();
+        this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
+
+        // Highlight für Glanz-Effekt
+        this.ctx.beginPath();
+        this.ctx.arc(centerX - radius * 0.4, centerY - radius * 0.4, radius * 0.25, 0, 2 * Math.PI);
+        this.ctx.fillStyle = "rgba(255,255,255,0.7)";
+        this.ctx.fill();
+        this.ctx.fillStyle = '#f44336';
+        // this.ctx.fillRect(this.food.x * this.gridSize, this.food.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
+    }
+    
+    private moveSnake(): void {
+        if (!this.gameRunning) return;
+        
+        const head = { x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy };
+        
+        // TODO: Kollisionsprüfung mit dem Spielrand
+        
+        // Kollisionsprüfung mit sich selbst
+        if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+            this.endGame();
+            return;
+        }
+        
+        this.snake.unshift(head);
+        
+        // Futter gefressen?
+        if (head.x === this.food.x && head.y === this.food.y) {
+            this.score++;
+            this.updateScore();
+            this.generateFood();
+        } else {
+            // Schwanz entfernen, wenn kein Futter gefressen wurde
+            this.snake.pop();
+        }
+    }
+    
+    private generateFood(): void {
+        let newFood: Position;
+        do {
+            newFood = {
+                x: Math.floor(Math.random() * this.tileCount),
+                y: Math.floor(Math.random() * this.tileCount)
+            };
+        } while (this.snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+        
+        this.food = newFood;
+    }
+    
+    private endGame(): void {
+        this.gameRunning = false;
+        this.gameOverElement.style.display = 'block';
+    }
+    
+    private gameLoop(): void {
+        if (this.gameRunning) {
+            this.moveSnake();
+        }
+        this.drawGame();
+        setTimeout(() => this.gameLoop(), 150);
+    }
+}
+
+// Spiel starten, wenn die Seite geladen ist
+window.addEventListener('DOMContentLoaded', () => {
+    new SnakeGame();
+});
+

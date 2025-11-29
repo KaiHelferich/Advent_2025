@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Spiel</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        #gameCanvas {
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+        #score {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #gameOver {
+            margin-top: 10px;
+            font-size: 18px;
+            color: red;
+            display: none;
+        }
+        .instructions {
+            margin-top: 10px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Snake Spiel</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="score">Punkte: 0</div>
+    <div id="gameOver">Spiel beendet! Drücke Leertaste zum Neustart.</div>
+    <div class="instructions">
+        <p>Verwende die Pfeiltasten zum Steuern</p>
+    </div>
+    <script type="module" src="dist/game.js"></script>
+</body>
+</html>
+
