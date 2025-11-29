@@ -56,6 +56,18 @@ Der Server läuft auf `http://localhost:8080` und öffnet automatisch den Browse
 
     **Lösung:** Zeile 141 - 144
 
+## Tür 2
+
+### Aufgaben
+
+Der Beginn einer neuen Runde soll mit einem Countdown-Overlay dargestellt werden.
+
+- Das notwendige HTML und CSS wird bereits mitgeliefert. Ebenso ein paar grundlegende Erweiterungen an der Spiellogik.
+- Du sollst die JS Funktion 'setInterval' hierfür verwenden und die Methode startCountdown ausprägen, siehe "TODO"
+
+Mehr dazu hier: https://developer.mozilla.org/de/docs/Web/API/Window/setInterval
+
+**Ergebnis:** Das Spiel beginnt beim Start oder Neustart immer mit dem Countdown-Overlay. Im Anschluss beginnt sich die Snake zu bewegen und der Spieler kann die Steuerung übernehmen.
 
 ## Beschreibung des Spiels
 

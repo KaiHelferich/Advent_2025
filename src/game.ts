@@ -10,6 +10,7 @@ class SnakeGame {
     private ctx: CanvasRenderingContext2D;
     private scoreElement: HTMLElement;
     private gameOverElement: HTMLElement;
+    private countdownOverlay: HTMLElement;
     
     private gridSize: number = 20;
     private tileCount: number = 20;
@@ -20,14 +21,18 @@ class SnakeGame {
     private dy: number = 0;
     private score: number = 0;
     private gameRunning: boolean = true;
+    private gameStarted: boolean = false;
+    private countdown: number = 3;
     
     constructor() {
         this.canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
         this.ctx = this.canvas.getContext('2d')!;
         this.scoreElement = document.getElementById('score')!;
         this.gameOverElement = document.getElementById('gameOver')!;
+        this.countdownOverlay = document.getElementById('countdownOverlay')!;
         
         this.setupEventListeners();
+        this.startCountdown();
         this.gameLoop();
     }
     
@@ -38,7 +43,7 @@ class SnakeGame {
                 return;
             }
             
-            if (!this.gameRunning) return;
+            if (!this.gameRunning || !this.gameStarted) return;
             
             switch (e.key) {
                 case 'ArrowUp':
@@ -69,6 +74,26 @@ class SnakeGame {
         });
     }
     
+    private startCountdown() {
+        this.gameStarted = false;
+        this.countdown = 3;
+        this.countdownOverlay.classList.remove('hidden');
+        this.countdownOverlay.textContent = this.countdown.toString();
+        
+        // Animation neu starten (damit die CSS Animation ausgeführt wird)
+        this.countdownOverlay.style.animation = 'none';
+        setTimeout(() => {
+            this.countdownOverlay.style.animation = '';
+        }, 10);
+
+        /**
+         * TODO Implementiere den Countdown und starte das Spiel, verwende setInterval
+         * sobald der Countdown beendet ist, sollen folgende Werte gesetzt werden, damit das Spiel startet und die Snake beginnt sich zu bewegen: 
+         * this.gameStarted = true;
+         * this.dx = 1; //Snake beginnt sich selbst zu bewegen
+        */
+    }
+    
     private resetGame(): void {
         this.snake = [{ x: 10, y: 10 }];
         this.food = { x: 15, y: 15 };
@@ -78,6 +103,7 @@ class SnakeGame {
         this.gameRunning = true;
         this.gameOverElement.style.display = 'none';
         this.updateScore();
+        this.startCountdown();
     }
     
     private updateScore(): void {
@@ -133,7 +159,7 @@ class SnakeGame {
     }
     
     private moveSnake(): void {
-        if (!this.gameRunning) return;
+        if (!this.gameRunning || !this.gameStarted) return;
         
         const head = { x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy };
         
