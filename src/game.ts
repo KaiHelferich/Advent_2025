@@ -137,10 +137,14 @@ class SnakeGame {
         
         const head = { x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy };
         
-        // TODO: Kollisionsprüfung mit dem Spielrand
+        // Kollisionsprüfung mit dem Spielrand
+        if (head.x < 0 || head.x >= this.tileCount || head.y < 0 || head.y >= this.tileCount) {
+            this.endGame();
+            return;
+        }
         
         // Kollisionsprüfung mit sich selbst
-        if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+        if (this.snake.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y)) {
             this.endGame();
             return;
         }
