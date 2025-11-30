@@ -7,7 +7,7 @@ Voraussetzungen:
 - Web-Entwicklungsumgebung, GIT, NodeJS lokal installiert
 - Kenntnisse über grundlegende Webentwicklung (inkl. Verwendung des Browser-Debuggers)
 
-## Tag 1
+## Tür 1
 
 ### Übersicht / Ziel:
 
