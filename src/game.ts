@@ -85,13 +85,32 @@ class SnakeGame {
         setTimeout(() => {
             this.countdownOverlay.style.animation = '';
         }, 10);
-
-        /**
-         * TODO Implementiere den Countdown und starte das Spiel, verwende setInterval
-         * sobald der Countdown beendet ist, sollen folgende Werte gesetzt werden, damit das Spiel startet und die Snake beginnt sich zu bewegen: 
-         * this.gameStarted = true;
-         * this.dx = 1; //Snake beginnt sich selbst zu bewegen
-        */
+        
+        const countdownInterval = setInterval(() => {
+            this.countdown--;
+            
+            if (this.countdown > 0) {
+                this.countdownOverlay.textContent = this.countdown.toString();
+                // Animation bei jedem Zahlwechsel neu starten
+                this.countdownOverlay.style.animation = 'none';
+                setTimeout(() => {
+                    this.countdownOverlay.style.animation = '';
+                }, 10);
+            } else if (this.countdown === 0) {
+                this.countdownOverlay.textContent = 'LOS!';
+                // Animation für "LOS!" neu starten
+                this.countdownOverlay.style.animation = 'none';
+                setTimeout(() => {
+                    this.countdownOverlay.style.animation = '';
+                }, 10);
+                setTimeout(() => {
+                    this.countdownOverlay.classList.add('hidden');
+                    this.gameStarted = true;
+                    this.dx = 1;
+                    clearInterval(countdownInterval);
+                }, 500);
+            }
+        }, 1000);
     }
     
     private resetGame(): void {
