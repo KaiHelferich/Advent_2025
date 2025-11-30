@@ -43,14 +43,14 @@ Der Server läuft auf `http://localhost:8080` und öffnet automatisch den Browse
 
 ### Aufgaben
 
-- Es gibt einen Fehler, weshalb das Spiel sofort beendet wird. Finde ihn und löse das Problem.
+- Leider beendet sich das Spiel immer sofort. Finde heraus, woran es liegt und behebe das Problem.
 
-    **Ergebnis**: Wenn der Fehler behoben ist, sollte die Snake sich mit den Pfeiltasten bewegen lassen, das Futter kann bereits aufgenommen werden und die Punkte werden gezählt. Das Spiel wird beendet, wenn die Snake mit sich selbst kollidiert.
+    **Ergebnis:** Wenn der Fehler behoben ist, sollte die Snake sich mit den Pfeiltasten bewegen lassen, das Futter kann bereits aufgenommen werden und die Punkte werden gezählt. Das Spiel wird beendet, wenn die Snake mit sich selbst kollidiert.
 
 
 - Im nächsten Schritt soll die Kollision mit dem Spielrand implementiert werden. Wenn die Snake den Rand verlassen würde, soll das Spiel beendet werden.
 
-    **Ergebnis**: Nun solltest du ein lauffähiges Spiel haben, das ordentlich beendet wird und auch wieder neugestartet werden kann. 
+    **Ergebnis:** Nun solltest du ein lauffähiges Spiel haben, das ordentlich beendet wird und auch wieder neugestartet werden kann. 
 
 
 ## Beschreibung des Spiels
