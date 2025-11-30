@@ -69,6 +69,16 @@ Mehr dazu hier: https://developer.mozilla.org/de/docs/Web/API/Window/setInterval
 
 **Ergebnis:** Das Spiel beginnt beim Start oder Neustart immer mit dem Countdown-Overlay. Im Anschluss beginnt sich die Snake zu bewegen und der Spieler kann die Steuerung übernehmen.
 
+## Tür 3
+
+### Aufgaben
+
+Das Spiel soll nun etwas interessanter gestaltet werden.
+
+Die Idee (Food Timer): Das Futter soll nach einer zufälligen Zeit verschwinden und an einem neuen Ort auftauchen. So, dass man es nicht immer erreichen kann. 
+
+Setze eine Unter- und Obergrenze (Zeit) für einen Zufallstimer und platziere das Futter an eine neue Stelle, wenn der Timer abgelaufen ist. Danach soll der Timer zurückgesetzt werden, eine neue Zufallszahl erstellt werden und bei Ablauf das Futter wieder neu platziert werden (und so weiter). Denk daran, wenn die Snake das Futter nimmt, dann sollte der Timer auch zurückgesetzt werden.
+
 ## Beschreibung des Spiels
 
 ### Spielregeln
