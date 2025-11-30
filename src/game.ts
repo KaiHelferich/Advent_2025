@@ -22,7 +22,10 @@ class SnakeGame {
     private score: number = 0;
     private gameRunning: boolean = true;
     private gameStarted: boolean = false;
+    private foodTimer: number = 0;
+    private foodTimerMax: number = 0;
     private countdown: number = 3;
+    private countdownInterval: number | undefined = undefined;
     
     constructor() {
         this.canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -32,6 +35,7 @@ class SnakeGame {
         this.countdownOverlay = document.getElementById('countdownOverlay')!;
         
         this.setupEventListeners();
+        this.resetFoodTimer();
         this.startCountdown();
         this.gameLoop();
     }
@@ -75,6 +79,9 @@ class SnakeGame {
     }
     
     private startCountdown() {
+        if(this.countdownInterval !== undefined) //Erlaube keinen erneuten Start, wenn der Countdown bereits läuft
+            return;
+
         this.gameStarted = false;
         this.countdown = 3;
         this.countdownOverlay.classList.remove('hidden');
@@ -86,7 +93,7 @@ class SnakeGame {
             this.countdownOverlay.style.animation = '';
         }, 10);
         
-        const countdownInterval = setInterval(() => {
+        this.countdownInterval = setInterval(() => {
             this.countdown--;
             
             if (this.countdown > 0) {
@@ -96,7 +103,7 @@ class SnakeGame {
                 setTimeout(() => {
                     this.countdownOverlay.style.animation = '';
                 }, 10);
-            } else if (this.countdown === 0) {
+            } else if (this.countdown <= 0) {
                 this.countdownOverlay.textContent = 'LOS!';
                 // Animation für "LOS!" neu starten
                 this.countdownOverlay.style.animation = 'none';
@@ -107,7 +114,8 @@ class SnakeGame {
                     this.countdownOverlay.classList.add('hidden');
                     this.gameStarted = true;
                     this.dx = 1;
-                    clearInterval(countdownInterval);
+                    clearInterval(this.countdownInterval);
+                    this.countdownInterval = undefined;
                 }, 500);
             }
         }, 1000);
@@ -122,6 +130,7 @@ class SnakeGame {
         this.gameRunning = true;
         this.gameOverElement.style.display = 'none';
         this.updateScore();
+        this.resetFoodTimer();
         this.startCountdown();
     }
     
@@ -174,6 +183,14 @@ class SnakeGame {
         this.ctx.fillStyle = "rgba(255,255,255,0.7)";
         this.ctx.fill();
         this.ctx.fillStyle = '#f44336';
+
+        const foodTimerLeft = (Math.ceil((this.foodTimerMax - this.foodTimer) / 1000)).toString();
+        const fontSize = 12;
+        this.ctx.font = "bold " + fontSize + "px Arial";
+        this.ctx.fillStyle = '#000000ff';
+        const space = (this.gridSize - fontSize) / 2
+        this.ctx.fillText(foodTimerLeft, this.food.x * this.gridSize + 7, this.food.y * this.gridSize + 14);
+        // <span id="foodTimerLeft">
         // this.ctx.fillRect(this.food.x * this.gridSize, this.food.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
     }
     
@@ -217,6 +234,26 @@ class SnakeGame {
         } while (this.snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
         
         this.food = newFood;
+        this.resetFoodTimer();
+    }
+    
+    private resetFoodTimer(): void {
+        // Zufällige Zeit (in Millisekunden)
+        const minTime = 1000;
+        const maxTime = 5000;
+        this.foodTimerMax = Math.floor(Math.random() * (maxTime - minTime) + minTime);
+        this.foodTimer = 0;
+    }
+    
+    private updateFoodTimer(deltaTime: number): void {
+        if (!this.gameRunning || !this.gameStarted) return;
+        
+        this.foodTimer += deltaTime;
+        
+        if (this.foodTimer >= this.foodTimerMax) {
+            // Futter verschwindet und erscheint an neuer Stelle
+            this.generateFood();
+        }
     }
     
     private endGame(): void {
@@ -225,11 +262,14 @@ class SnakeGame {
     }
     
     private gameLoop(): void {
+        const frameTime = 150; // Millisekunden pro Frame
+        
         if (this.gameRunning) {
             this.moveSnake();
+            this.updateFoodTimer(frameTime);
         }
         this.drawGame();
-        setTimeout(() => this.gameLoop(), 150);
+        setTimeout(() => this.gameLoop(), frameTime);
     }
 }
 

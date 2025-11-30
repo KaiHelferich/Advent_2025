@@ -79,6 +79,8 @@ Die Idee (Food Timer): Das Futter soll nach einer zufälligen Zeit verschwinden 
 
 Setze eine Unter- und Obergrenze (Zeit) für einen Zufallstimer und platziere das Futter an eine neue Stelle, wenn der Timer abgelaufen ist. Danach soll der Timer zurückgesetzt werden, eine neue Zufallszahl erstellt werden und bei Ablauf das Futter wieder neu platziert werden (und so weiter). Denk daran, wenn die Snake das Futter nimmt, dann sollte der Timer auch zurückgesetzt werden.
 
+**Lösung:** Die Lösung zeigt eine einfache Implementierung. Die Methode resetFoodTimer erstellt einen neuen Timer, eine zweite Methode updateFoodTimer prüft mittels Delta-Zeit, ob das Futter neu platziert werden soll. Als kleine Hilfe wird der Timer in Sekunden auf dem Futter angezeigt (die natürlich später ausgebaut werden sollte für ein spannenderes Spielerlebnis).
+
 ## Beschreibung des Spiels
 
 ### Spielregeln
