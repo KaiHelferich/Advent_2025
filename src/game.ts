@@ -11,6 +11,9 @@ class SnakeGame {
     private scoreElement: HTMLElement;
     private gameOverElement: HTMLElement;
     private countdownOverlay: HTMLElement;
+    private pauseOverlay: HTMLElement;
+    private pauseBtn: HTMLButtonElement;
+    private resetBtn: HTMLButtonElement;
     
     private gridSize: number = 20;
     private tileCount: number = 20;
@@ -22,6 +25,7 @@ class SnakeGame {
     private score: number = 0;
     private gameRunning: boolean = true;
     private gameStarted: boolean = false;
+    private isPaused: boolean = false;
     private foodTimer: number = 0;
     private foodTimerMax: number = 0;
     private countdown: number = 3;
@@ -33,6 +37,9 @@ class SnakeGame {
         this.scoreElement = document.getElementById('score')!;
         this.gameOverElement = document.getElementById('gameOver')!;
         this.countdownOverlay = document.getElementById('countdownOverlay')!;
+        this.pauseOverlay = document.getElementById('pauseOverlay')!;
+        this.pauseBtn = document.getElementById('pauseBtn') as HTMLButtonElement;
+        this.resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
         
         this.setupEventListeners();
         this.resetFoodTimer();
@@ -41,13 +48,27 @@ class SnakeGame {
     }
     
     private setupEventListeners(): void {
+        // Tastatursteuerung
         document.addEventListener('keydown', (e) => {
+            // Pause/Play mit P-Taste
+            if (e.key === 'p' || e.key === 'P') {
+                this.togglePause();
+                return;
+            }
+            
+            // Reset mit R-Taste
+            if (e.key === 'r' || e.key === 'R') {
+                this.resetGame();
+                return;
+            }
+            
+            // Neustart nach Game Over mit Leertaste
             if (!this.gameRunning && e.code === 'Space') {
                 this.resetGame();
                 return;
             }
             
-            if (!this.gameRunning || !this.gameStarted) return;
+            if (!this.gameRunning || !this.gameStarted || this.isPaused) return;
             
             switch (e.key) {
                 case 'ArrowUp':
@@ -76,6 +97,30 @@ class SnakeGame {
                     break;
             }
         });
+        
+        // Button-Event-Listener
+        this.pauseBtn.addEventListener('click', () => {
+            this.togglePause();
+        });
+        
+        this.resetBtn.addEventListener('click', () => {
+            this.resetGame();
+        });
+    }
+    
+    private togglePause(): void {
+        // Pause nur möglich, wenn Spiel läuft und gestartet wurde
+        if (!this.gameRunning || !this.gameStarted) return;
+        
+        this.isPaused = !this.isPaused;
+        
+        if (this.isPaused) {
+            this.pauseOverlay.classList.add('visible');
+            this.pauseBtn.textContent = 'Weiter (P)';
+        } else {
+            this.pauseOverlay.classList.remove('visible');
+            this.pauseBtn.textContent = 'Pause (P)';
+        }
     }
     
     private startCountdown() {
@@ -122,13 +167,17 @@ class SnakeGame {
     }
     
     private resetGame(): void {
+        // Wird nach Game Over aufgerufen (mit Leertaste)
         this.snake = [{ x: 10, y: 10 }];
         this.food = { x: 15, y: 15 };
         this.dx = 0;
         this.dy = 0;
         this.score = 0;
         this.gameRunning = true;
+        this.isPaused = false;
         this.gameOverElement.style.display = 'none';
+        this.pauseOverlay.classList.remove('visible');
+        this.pauseBtn.textContent = 'Pause (P)';
         this.updateScore();
         this.resetFoodTimer();
         this.startCountdown();
@@ -195,7 +244,7 @@ class SnakeGame {
     }
     
     private moveSnake(): void {
-        if (!this.gameRunning || !this.gameStarted) return;
+        if (!this.gameRunning || !this.gameStarted || this.isPaused) return;
         
         const head = { x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy };
         
@@ -246,7 +295,7 @@ class SnakeGame {
     }
     
     private updateFoodTimer(deltaTime: number): void {
-        if (!this.gameRunning || !this.gameStarted) return;
+        if (!this.gameRunning || !this.gameStarted || this.isPaused) return;
         
         this.foodTimer += deltaTime;
         

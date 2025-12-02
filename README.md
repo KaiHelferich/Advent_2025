@@ -87,6 +87,8 @@ Setze eine Unter- und Obergrenze (Zeit) für einen Zufallstimer und platziere da
 
 Implementiere eine Pause und Reset Funktion. Passendes HTML und CSS werden dir bereits zur Verfügung gestellt.
 
+**Lösung:** Siehe Quellcode in der game.ts
+
 ## Beschreibung des Spiels
 
 ### Spielregeln
