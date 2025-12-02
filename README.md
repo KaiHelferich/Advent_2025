@@ -81,6 +81,12 @@ Setze eine Unter- und Obergrenze (Zeit) für einen Zufallstimer und platziere da
 
 **Lösung:** Die Lösung zeigt eine einfache Implementierung. Die Methode resetFoodTimer erstellt einen neuen Timer, eine zweite Methode updateFoodTimer prüft mittels Delta-Zeit, ob das Futter neu platziert werden soll. Als kleine Hilfe wird der Timer in Sekunden auf dem Futter angezeigt (die natürlich später ausgebaut werden sollte für ein spannenderes Spielerlebnis).
 
+## Tür 4
+
+### Aufgaben
+
+Implementiere eine Pause und Reset Funktion. Passendes HTML und CSS werden dir bereits zur Verfügung gestellt.
+
 ## Beschreibung des Spiels
 
 ### Spielregeln

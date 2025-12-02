@@ -37,6 +37,54 @@
             text-align: center;
             color: #666;
         }
+        .controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .btn-reset {
+            background-color: #f44336;
+        }
+        .btn-reset:hover {
+            background-color: #da190b;
+        }
+        #pauseOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 400px;
+            height: 400px;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            font-size: 60px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            border-radius: 2px;
+        }
+        #pauseOverlay.visible {
+            display: flex;
+        }
         #gameContainer {
             position: relative;
             display: inline-block;
@@ -81,12 +129,17 @@
     <h1>Snake Spiel</h1>
     <div id="gameContainer">
         <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div id="countdownOverlay" class="hidden"></div>
+        <div id="countdownOverlay">3</div>
+        <div id="pauseOverlay">PAUSIERT</div>
     </div>
     <div id="score">Punkte: 0</div>
     <div id="gameOver">Spiel beendet! Drücke Leertaste zum Neustart.</div>
+    <div class="controls">
+        <button id="pauseBtn" class="btn">Pause (P)</button>
+        <button id="resetBtn" class="btn btn-reset">Reset (R)</button>
+    </div>
     <div class="instructions">
-        <p>Verwende die Pfeiltasten zum Steuern</p>
+        <p>Verwende die Pfeiltasten zum Steuern | P = Pause | R = Reset</p>
     </div>
     <script type="module" src="dist/game.js"></script>
 </body>
