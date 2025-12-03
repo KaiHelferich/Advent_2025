@@ -54,7 +54,22 @@ export class HighscoreManager {
                 return;
             }
 
-            //TODO
+            const entry: HighscoreEntry = {
+                score: score,
+                date: new Date() // Wird automatisch als ISO-String gespeichert
+            };
+
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.add(entry);
+
+            request.onsuccess = async () => {
+                resolve();
+            };
+
+            request.onerror = () => {
+                reject(new Error('Score konnte nicht gespeichert werden'));
+            };
         });
     }
 
@@ -73,7 +88,31 @@ export class HighscoreManager {
                 return;
             }
 
-            //TODO
+            const transaction = this.db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            const index = store.index('score');
+            const request = index.openCursor(null, 'prev'); // Absteigend sortiert
+
+            const scores: HighscoreEntry[] = [];
+
+            request.onsuccess = (event) => {
+                const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
+                if (cursor && scores.length < limit) {
+                    const entry = cursor.value;
+                    // Konvertiere date String zurück zu Date-Objekt
+                    if (typeof entry.date === 'string') {
+                        entry.date = new Date(entry.date);
+                    }
+                    scores.push(entry);
+                    cursor.continue();
+                } else {
+                    resolve(scores);
+                }
+            };
+
+            request.onerror = () => {
+                reject(new Error('Scores konnten nicht geladen werden'));
+            };
         });
     }
 
@@ -92,7 +131,17 @@ export class HighscoreManager {
                 return;
             }
 
-            //TODO
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store.clear();
+
+            request.onsuccess = () => {
+                resolve();
+            };
+
+            request.onerror = () => {
+                reject(new Error('Scores konnten nicht gelöscht werden'));
+            };
         });
     }
 }

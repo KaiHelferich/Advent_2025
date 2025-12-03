@@ -97,6 +97,7 @@ Wir möchten nun die Spiel-Ergebnisse in einem Highscore speichern. Der Highscor
 
 https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
 
+**Lösung:** Interessant ist die Lösung, wie mit index und cursor die Top Ergebnisse von der Datenbank geladen werden. So erfolgt die Sortierung direkt auf der Datenbank. 
 
 ## Beschreibung des Spiels
 
