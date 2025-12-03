@@ -89,6 +89,15 @@ Implementiere eine Pause und Reset Funktion. Passendes HTML und CSS werden dir b
 
 **Lösung:** Siehe Quellcode in der game.ts
 
+## Tür 5
+
+### Aufgaben
+
+Wir möchten nun die Spiel-Ergebnisse in einem Highscore speichern. Der Highscore soll lokal im Browser gespeichert werden. Die indexedDB ist hierfür gut geeignet, verwende sie und implementiere die Methoden "addScore", "getTopScores", "clearAllScores" des HighscoreManagers.
+
+https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
+
+
 ## Beschreibung des Spiels
 
 ### Spielregeln

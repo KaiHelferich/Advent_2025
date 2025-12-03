@@ -37,6 +37,52 @@
             text-align: center;
             color: #666;
         }
+        #highscoreSection {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+        #highscoreTitle {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        #highscoreList {
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .highscore-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .highscore-entry:last-child {
+            border-bottom: none;
+        }
+        .highscore-rank {
+            font-weight: bold;
+            color: #4CAF50;
+            min-width: 30px;
+        }
+        .highscore-score {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .highscore-date {
+            color: #666;
+            font-size: 14px;
+        }
+        .btn-highscore-reset {
+            background-color: #ff9800;
+        }
+        .btn-highscore-reset:hover {
+            background-color: #e68900;
+        }
         .controls {
             margin-top: 15px;
             display: flex;
@@ -140,6 +186,19 @@
     </div>
     <div class="instructions">
         <p>Verwende die Pfeiltasten zum Steuern | P = Pause | R = Reset</p>
+    </div>
+    <div id="highscoreSection">
+        <div id="highscoreTitle">🏆 Highscores</div>
+        <div id="highscoreList">
+            <div class="highscore-entry">
+                <span class="highscore-rank">-</span>
+                <span class="highscore-score">Keine Scores vorhanden</span>
+                <span class="highscore-date"></span>
+            </div>
+        </div>
+        <div class="controls" style="justify-content: center;">
+            <button id="resetHighscoreBtn" class="btn btn-highscore-reset">Highscores zurücksetzen</button>
+        </div>
     </div>
     <script type="module" src="dist/game.js"></script>
 </body>

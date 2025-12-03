@@ -1,5 +1,7 @@
 // Snake-Spiel in TypeScript
 
+import { HighscoreManager, HighscoreEntry } from './highscore.js';
+
 interface Position {
     x: number;
     y: number;
@@ -14,6 +16,9 @@ class SnakeGame {
     private pauseOverlay: HTMLElement;
     private pauseBtn: HTMLButtonElement;
     private resetBtn: HTMLButtonElement;
+    private resetHighscoreBtn: HTMLButtonElement;
+    private highscoreList: HTMLElement;
+    private highscoreManager: HighscoreManager;
     
     private gridSize: number = 20;
     private tileCount: number = 20;
@@ -40,11 +45,68 @@ class SnakeGame {
         this.pauseOverlay = document.getElementById('pauseOverlay')!;
         this.pauseBtn = document.getElementById('pauseBtn') as HTMLButtonElement;
         this.resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
+        this.resetHighscoreBtn = document.getElementById('resetHighscoreBtn') as HTMLButtonElement;
+        this.highscoreList = document.getElementById('highscoreList')!;
+        this.highscoreManager = new HighscoreManager();
         
+        this.initHighscores();
         this.setupEventListeners();
         this.resetFoodTimer();
         this.startCountdown();
         this.gameLoop();
+    }
+    
+    private async initHighscores(): Promise<void> {
+        try {
+            await this.highscoreManager.init();
+            await this.updateHighscoreDisplay();
+        } catch (error) {
+            console.error('Fehler beim Initialisieren der Highscores:', error);
+        }
+    }
+    
+    private async updateHighscoreDisplay(): Promise<void> {
+        try {
+            const scores = await this.highscoreManager.getTopScores(5);
+            this.highscoreList.innerHTML = '';
+            
+            if (scores.length === 0) {
+                const emptyEntry = document.createElement('div');
+                emptyEntry.className = 'highscore-entry';
+                emptyEntry.innerHTML = `
+                    <span class="highscore-rank">-</span>
+                    <span class="highscore-score">Keine Scores vorhanden</span>
+                    <span class="highscore-date"></span>
+                `;
+                this.highscoreList.appendChild(emptyEntry);
+            } else {
+                scores.forEach((entry, index) => {
+                    const entryElement = document.createElement('div');
+                    entryElement.className = 'highscore-entry';
+                    
+                    // Stelle sicher, dass date ein Date-Objekt ist
+                    const date = entry.date instanceof Date ? entry.date : new Date(entry.date);
+                    const dateStr = date.toLocaleDateString('de-DE', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    const timeStr = date.toLocaleTimeString('de-DE', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    entryElement.innerHTML = `
+                        <span class="highscore-rank">${index + 1}.</span>
+                        <span class="highscore-score">${entry.score} Punkte</span>
+                        <span class="highscore-date">${dateStr} ${timeStr}</span>
+                    `;
+                    this.highscoreList.appendChild(entryElement);
+                });
+            }
+        } catch (error) {
+            console.error('Fehler beim Laden der Highscores:', error);
+        }
     }
     
     private setupEventListeners(): void {
@@ -105,6 +167,18 @@ class SnakeGame {
         
         this.resetBtn.addEventListener('click', () => {
             this.resetGame();
+        });
+        
+        this.resetHighscoreBtn.addEventListener('click', async () => {
+            if (confirm('Möchten Sie wirklich alle Highscores zurücksetzen?')) {
+                try {
+                    await this.highscoreManager.clearAllScores();
+                    await this.updateHighscoreDisplay();
+                } catch (error) {
+                    console.error('Fehler beim Zurücksetzen der Highscores:', error);
+                    alert('Fehler beim Zurücksetzen der Highscores');
+                }
+            }
         });
     }
     
@@ -305,9 +379,19 @@ class SnakeGame {
         }
     }
     
-    private endGame(): void {
+    private async endGame(): Promise<void> {
         this.gameRunning = false;
         this.gameOverElement.style.display = 'block';
+        
+        // Speichere Score als Highscore
+        if (this.score > 0) {
+            try {
+                await this.highscoreManager.addScore(this.score);
+                await this.updateHighscoreDisplay();
+            } catch (error) {
+                console.error('Fehler beim Speichern des Highscores:', error);
+            }
+        }
     }
     
     private gameLoop(): void {
