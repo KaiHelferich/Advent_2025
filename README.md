@@ -99,6 +99,12 @@ https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
 
 **Lösung:** Interessant ist die Lösung, wie mit index und cursor die Top Ergebnisse von der Datenbank geladen werden. So erfolgt die Sortierung direkt auf der Datenbank. 
 
+## Tür 6
+
+### Aufgaben
+
+Heute soll ein Level-System realisiert werden. Alle drei Punkte soll das Level erhöht werden und damit ein Effekt spürbar wird, soll jedes Level die Geschwindigkeit der Snake erhöht werden. Zeige auch das Level auf der Oberfläche an.
+
 ## Beschreibung des Spiels
 
 ### Spielregeln
